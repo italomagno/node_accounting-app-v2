@@ -5,10 +5,6 @@ function getAll() {
   return expenses;
 }
 
-function getExpensesByUserId(userId) {
-  return expenses.filter((e) => e.userId === parseFloat(userId));
-}
-
 function getExpenseByQuery(query) {
   const { to, from, userId, categories } = query;
 
@@ -35,6 +31,18 @@ function getExpenseByQuery(query) {
   if (userId) {
     const filteredExpenses = expenses.filter(
       (expense) => expense.userId === parseFloat(userId),
+    );
+
+    return filteredExpenses;
+  }
+
+  if (userId && categories && to && from) {
+    const filteredExpenses = expenses.filter(
+      (expense) =>
+        expense.userId === parseFloat(userId) &&
+        expense.category === categories &&
+        expense.spentAt >= new Date(from) &&
+        expense.spentAt <= new Date(to),
     );
 
     return filteredExpenses;
@@ -91,7 +99,6 @@ function remove(id) {
 module.exports = {
   getAll,
   getExpenseById,
-  getExpensesByUserId,
   getExpenseByQuery,
   create,
   update,

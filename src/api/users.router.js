@@ -18,63 +18,91 @@ usersRouter.get('/', (req, res) => {
 });
 
 usersRouter.get('/:id', (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  const user = usersService.getUserById(id);
+    const user = usersService.getUserById(id);
 
-  if (!user) {
-    res.status(404).end();
+    if (!user) {
+      res.status(404).end();
 
-    return;
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: 'An error occurred while fetching the user',
+      error: error.message,
+    });
   }
-
-  res.status(200).json(user);
 });
 
 usersRouter.post('/', (req, res) => {
-  const user = req.body;
+  try {
+    const user = req.body;
 
-  if (!user.name) {
-    res.status(400).json({
-      message: 'Name is required',
+    if (!user.name) {
+      res.status(400).json({
+        message: 'Name is required',
+      });
+
+      return;
+    }
+
+    const newUser = usersService.create(user);
+
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).json({
+      message: 'An error occurred while creating the user',
+      error: error.message,
     });
-
-    return;
   }
-
-  const newUser = usersService.create(user);
-
-  res.status(201).json(newUser);
 });
 
 usersRouter.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const user = req.body;
+  try {
+    const { id } = req.params;
+    const user = req.body;
 
-  const updatedUser = usersService.update(id, user);
+    const updatedUser = usersService.update(id, user);
 
-  if (!updatedUser) {
-    res.status(404).end();
+    if (!updatedUser) {
+      res.status(404).end();
 
-    return;
+      return;
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({
+      message: 'An error occurred while updating the user',
+      error: error.message,
+    });
   }
-
-  res.status(200).json(updatedUser);
 });
 
 usersRouter.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const user = req.body;
+  try {
+    const { id } = req.params;
+    const user = req.body;
 
-  const updatedUser = usersService.update(id, user);
+    const updatedUser = usersService.update(id, user);
 
-  if (!updatedUser) {
-    res.status(404).end();
+    if (!updatedUser) {
+      res.status(404).end();
 
-    return;
+      return;
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({
+      message: 'An error occurred while updating the user',
+      error: error.message,
+    });
   }
-
-  res.status(200).json(updatedUser);
 });
 
 usersRouter.delete('/:id', (req, res) => {
